@@ -43,7 +43,7 @@ function registerOwner() {
       type: 'POST',
       data: ownerObjectToSend
    }).done(function (response) {
-  //  refreshOwners();
+  refreshOwners();
    }).fail(function (error) {
      console.log('error', error);
    });
