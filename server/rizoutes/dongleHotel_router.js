@@ -27,6 +27,7 @@ dongleRouter.get('/owners', function(req, res) {
           console.log('Error making query', err);
           res.sendStatus(500);
         } else {
+          console.log(result.rows);
           res.send(result.rows);
         }
       });
