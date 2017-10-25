@@ -20,8 +20,8 @@ dongleRouter.get('/', function(req, res) {
       res.sendStatus(500);
     } else {
       //we connected to DB
-      var queryText = 'SELECT * FROM "taskstodo" WHERE ("due" >= $1 AND "due" <= $2 AND "complete"=false);';
-      db.query(queryText, [startOfWeek, endOfWeek], function(err, result){
+      var queryText = 'SELECT * FROM "hotel_pets" JOIN "hotel_owners" ON "hotel_pets.owner_id" = "hotel_owners"."id";';
+      db.query(queryText, [], function(err, result){
         done();
         if(err) {
           console.log('Error making query', err);
