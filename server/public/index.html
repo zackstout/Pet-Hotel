@@ -1,13 +1,50 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <script src="vendors/jquery.js" charset="utf-8"></script>
-    <script src="scripts/client.js" charset="utf-8"></script>
-    <title>what up</title>
-  </head>
-  <body>
-    <h1> what up </h1>
+<head>
+  <meta charset="utf-8">
+  <script src="vendors/jquery.js" charset="utf-8"></script>
+  <script src="scripts/client.js" charset="utf-8"></script>
+  <title>what up</title>
+</head>
+<body>
+  <h1> what up </h1>
+  <h2> Owner Registration </h2>
+  <form>
+    <input type="text" id="firstName" />
+    <input type="text" id="lastName" />
+    <button type="submit" id=regBtn>Register</button>
+  </form>
+
+
+  <h2> Pets </h2>
+  <form>
+    <select id="ownerName">
+      <option value="1" data-id="blue" id="option1">academics</option>
+      <option value="2" data-id="green" id="option2">economic</option>
+      <option value="3" data-id="red" id="option3">chores</option>
+      <option value="4" data-id="yellow" id="option4">self-care</option>
+    </select>
+    <input type="text" id="petName" />
+    <input type="text" id="petColor" />
+    <input type="text" id="petBreed" />
+    <button type="submit" id="addPetBtn">Add Pet</button>
+
+  </form>
+
+<br><br>
+    <table>
+      <thead>
+        <th>Owner</th>
+        <th>Pet</th>
+        <th>Breed</th>
+        <th>Color</th>
+        <th>Update</th>
+        <th>Delete</th>
+        <th>Check In/Out</th>
+      </thead>
+      <tbody id="tBody">
+      </tbody>
+    </table>
 
   </body>
-</html>
+  </html>
