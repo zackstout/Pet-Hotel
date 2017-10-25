@@ -13,14 +13,14 @@ var config = {
 };
 var pool = new pg.Pool(config);
 
-dongleRouter.get('/', function(req, res) {
+dongleRouter.get('/owners', function(req, res) {
   pool.connect(function(err, db, done) {
     if(err) {
       console.log('Error connecting', err);
       res.sendStatus(500);
     } else {
       //we connected to DB
-      var queryText = 'SELECT * FROM "hotel_pets" JOIN "hotel_owners" ON "hotel_pets.owner_id" = "hotel_owners"."id";';
+      var queryText = 'SELECT * FROM "hotel_owners";';
       db.query(queryText, [], function(err, result){
         done();
         if(err) {
@@ -33,5 +33,122 @@ dongleRouter.get('/', function(req, res) {
     }
   });
 }); //END GET ROUTE
+
+dongleRouter.get('/pets', function(req, res) {
+  pool.connect(function(err, db, done) {
+    if(err) {
+      console.log('Error connecting', err);
+      res.sendStatus(500);
+    } else {
+      //we connected to DB
+      var queryText = 'SELECT * FROM "hotel_pets" JOIN "hotel_owners" ON "hotel_pets"."owner_id" = "hotel_owners"."id";';
+      db.query(queryText, [], function(err, result){
+        done();
+        if(err) {
+          console.log('Error making query', err);
+          res.sendStatus(500);
+        } else {
+          res.send(result.rows);
+        }
+      });
+    }
+  });
+}); //END GET ROUTE
+
+dongleRouter.post('/owners', function(req, res){
+  var owner = req.body;
+  console.log(owner);
+  pool.connect(function (err, db, done) {
+    if (err) {
+      console.log('Error connecting', err);
+      res.sendStatus(500);
+    } else {
+      var queryText = 'INSERT INTO "hotel_owners" ("first_name", "last_name") VALUES ($1, $2);';
+      db.query(queryText, [owner.first_name, owner.last_name], function (err, result) {
+        done(); // pool +1
+        if (err) {
+          console.log('Error making query', err);
+          res.sendStatus(500);
+        } else {
+          res.sendStatus(201);
+        }
+      });
+    }
+  });
+}); //END POST ROUTE
+
+dongleRouter.post('/pets', function(req, res){
+  var pet = req.body;
+  console.log("pet lookin like", pet);
+  pool.connect(function (err, db, done) {
+    if (err) {
+      console.log('Error connecting', err);
+      res.sendStatus(500);
+    } else {
+      var queryText = 'INSERT INTO "hotel_pets" ("name", "breed", "color") VALUES ($1, $2, $3);';
+      db.query(queryText, [pet.name, pet.breed, pet.color], function (err, result) {
+        done(); // pool +1
+        if (err) {
+          console.log('Error making query', err);
+          res.sendStatus(500);
+        } else {
+          res.sendStatus(201);
+        }
+      });
+    }
+  });
+}); //END POST ROUTE
+
+//EXTRA BUTTONS ROUTES:
+router.delete('/:id', function(req, res){
+  var petId = req.params.id;
+  console.log(taskId);
+  // res.sendStatus(200);
+  pool.connect(function (errorConnectingToDb, db, done) {
+    if (errorConnectingToDb) {
+      console.log('Error connecting', errorConnectingToDb);
+      res.sendStatus(500);
+    } else {
+      // We connected to the db!!!!! pool -1
+      var queryText = 'DELETE FROM "taskstodo" WHERE "id"=$1;';
+      db.query(queryText, [taskId], function (errorMakingQuery, result) {
+        // We have received an error or result at this point
+        done(); // pool +1
+        if (errorMakingQuery) {
+          console.log('Error making query', errorMakingQuery);
+          res.sendStatus(500);
+        } else {
+          res.sendStatus(201);
+        }
+      }); // END QUERY
+    }
+  }); // END POOL
+}); //END DELETE ROUTE
+
+router.put('/:id', function(req,res){
+  var taskId = req.params.id;
+  console.log(taskId);
+  //res.sendStatus(200);
+  pool.connect(function (errorConnectingToDb, db, done) {
+    if (errorConnectingToDb) {
+      console.log('Error connecting', errorConnectingToDb);
+      res.sendStatus(500);
+    } else {
+      // We connected to the db!!!!! pool -1
+      var queryText = 'UPDATE "taskstodo" SET "complete" = true WHERE "id" = $1;';
+      db.query(queryText, [taskId], function (errorMakingQuery, result) {
+        // We have received an error or result at this point
+        done(); // pool +1
+        if (errorMakingQuery) {
+          console.log('Error making query', errorMakingQuery);
+          res.sendStatus(500);
+        } else {
+          // Send back success!
+          res.sendStatus(201);
+        }
+      }); // END QUERY
+    }
+  }); // END POOL
+}); //END PUT ROUTE
 
 module.exports = dongleRouter;
