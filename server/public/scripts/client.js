@@ -64,9 +64,9 @@ function refreshOwners(ownerNamesArray) {
 $('#ownerName').empty();
 for (var i = 0; i < ownerNamesArray.length; i++) {
   ownerName = ownerNamesArray[i];
-  var $option = $(<option></option>);
+  var $option = $('<option></option>');
   $option.append(ownerName.firstName + ownerName.lastName);//?????
-
+  $('#ownerName').append($option);
 }
 
 }

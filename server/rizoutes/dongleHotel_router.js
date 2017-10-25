@@ -100,7 +100,7 @@ dongleRouter.post('/pets', function(req, res){
 }); //END POST ROUTE
 
 //EXTRA BUTTONS ROUTES:
-router.delete('/:id', function(req, res){
+dongleRouter.delete('/:id', function(req, res){
   var petId = req.params.id;
   console.log(taskId);
   // res.sendStatus(200);
@@ -125,7 +125,7 @@ router.delete('/:id', function(req, res){
   }); // END POOL
 }); //END DELETE ROUTE
 
-router.put('/:id', function(req,res){
+dongleRouter.put('/:id', function(req,res){
   var taskId = req.params.id;
   console.log(taskId);
   //res.sendStatus(200);
