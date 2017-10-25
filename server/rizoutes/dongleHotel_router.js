@@ -101,9 +101,9 @@ dongleRouter.post('/pets', function(req, res){
 }); //END POST ROUTE
 
 //EXTRA BUTTONS ROUTES:
-dongleRouter.delete('/:id', function(req, res){
+dongleRouter.delete('/pets/:id', function(req, res){
   var petId = req.params.id;
-  console.log(taskId);
+  console.log(petId);
   // res.sendStatus(200);
   pool.connect(function (errorConnectingToDb, db, done) {
     if (errorConnectingToDb) {
@@ -111,8 +111,9 @@ dongleRouter.delete('/:id', function(req, res){
       res.sendStatus(500);
     } else {
       // We connected to the db!!!!! pool -1
-      var queryText = 'DELETE FROM "taskstodo" WHERE "id"=$1;';
-      db.query(queryText, [taskId], function (errorMakingQuery, result) {
+      console.log(petId);
+      var queryText = 'DELETE FROM "hotel_pets" WHERE "id"=$1;';
+      db.query(queryText, [petId], function (errorMakingQuery, result) {
         // We have received an error or result at this point
         done(); // pool +1
         if (errorMakingQuery) {
