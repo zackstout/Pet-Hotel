@@ -8,14 +8,15 @@
   <script src="scripts/client.js" charset="utf-8"></script>
     <link rel="stylesheet" href="vendors/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="vendors/bootstrap/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-  <div class="container-fluid">
-  <div class="jumbotron">
+  <div class="container">
+  <div class="jumbotron specialjum">
   <h1>Pet Hotel</h1>
   </div>
   <h2> Owner Registration </h2>
-  <form>
+  <form id="ownerForm">
     <input type="text" id="firstName" />
     <input type="text" id="lastName" />
     <button type="submit" id="regBtn">Register</button>
@@ -23,7 +24,7 @@
 
 
   <h2> Pets </h2>
-  <form>
+  <form id = "petFrom">
     <select id="ownerName">
      <!-- <option value="1" data-id="blue" id="option1">academics</option>
       <option value="2" data-id="green" id="option2">economic</option>
@@ -39,7 +40,7 @@
 
 <br><br>
 <div class="table-responsive"></div>
-    <table class="table-striped">
+    <table class="table table-striped">
       <thead>
         <th>Owner</th>
         <th>Pet</th>
@@ -50,7 +51,7 @@
         <th>Check In/Out</th>
       </thead>
       <tbody id="tBody">
-
+        <!-- append information heree -->
 
           </tbody>
         </table>
