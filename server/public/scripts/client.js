@@ -13,8 +13,13 @@ function readyNow() {
   $('#regBtn').on('click', registerOwner);
   refreshPets();
   getOwners();
+  $('#tBody').on('click', '.updateBtn', editPet);
 
 }
+
+var editing = false;
+var editingId = 0;
+
 
 function refreshPets() {
   console.log ('refreshing Pets');
@@ -40,7 +45,7 @@ function appendToDom(array) {
   for (var i = 0; i < array.length; i++) {
     var pet = array[i];
     var $tr = '<tr></tr>';
-    var ownerName = pet.first_name + pet.last_name;
+    var ownerName = pet.first_name + ' ' + pet.last_name;
     var petName = pet.name;
     var petBreed = pet.breed;
     var petColor = pet.color;
@@ -108,7 +113,7 @@ function refreshOwners(ownerNamesArray) {
   //loop through the array and pull out each name, saving it to the object
   for (var i = 0; i < ownerNamesArray.length; i++) {
     var ownerName = ownerNamesArray[i];
-    var realName = ownerName.first_name + ownerName.last_name;
+    var realName = ownerName.first_name + ' ' + ownerName.last_name;
     console.log('what is the owner name.id', ownerName.id);
     console.log(realName);
     object2[i] = realName;
@@ -119,14 +124,22 @@ function refreshOwners(ownerNamesArray) {
 
   console.log(object2);
 
-  //loop through the properties of your object and update the dropdown menu
-  // $.each(object2, function(key,value) {
-  //   $el.append($("<option value=' " + ownerName.id + "'></option>")
-  //   .data("id", key)
-  //   .attr("value", value).text(value));
-  // });
 
 } //end refreshOwners!!!
+
+function savePet() {
+  $.ajax({
+    url: '/hotel/pets',
+    type: 'POST',
+    data: newPetObjectToSend
+  }).done(function (response) {
+    console.log(response);
+    // refreshOwners();
+    refreshPets();
+  }).fail(function (error) {
+    console.log('error', error);
+  });
+}
 
 function addPet(event) {
   console.log('addPet clicked');
@@ -147,16 +160,32 @@ function addPet(event) {
     petBreedIn : petBreedIn
   };
   console.log(newPetObjectToSend);
-  $.ajax({
-    url: '/hotel/pets',
-    type: 'POST',
-    data: newPetObjectToSend
-  }).done(function (response) {
-    console.log(response);
-    // refreshOwners();
-    refreshPets();
-  }).fail(function (error) {
-    console.log('error', error);
-  });
+  // savePet(newPetObjectToSend);
+  if(editing) {
+    editing = false;
+    $('#addEdit').text('Add Pet');
+    updatePet(newPetObjectToSend);
+  } else {
+    savePet(newPetObjectToSend);
+  }
 
 } //end add pets!!
+
+function editPet() {
+  console.log('update clicked');
+  editing = true;
+  editingId = $(this).data('id');
+  $('#addEdit').text("Edit Pet!!");
+}
+
+function updatePet(pet) {
+  $.ajax({
+    type: 'PUT',
+    url: '/hotel/' + editingId,
+    data: pet
+  }).done(function(response){
+    refreshPets();
+  }).fail(function (error){
+    alert('something went wrong');
+  });
+}
