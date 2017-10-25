@@ -4,14 +4,14 @@ $(document).ready(readyNow);
 
 function readyNow() {
   console.log('jq');
-// //
-// $('form').on('submit', function (event){
-//   event.preventDefault();
-//   registerOwner();
-// }); // prevents automatic refresh due to form and calls register function
-$('#addPetBtn').on('click', addPet); // calls addPet function
-$('#regBtn').on('click', registerOwner);
-refreshPets();
+  // //
+  // $('form').on('submit', function (event){
+  //   event.preventDefault();
+  //   registerOwner();
+  // }); // prevents automatic refresh due to form and calls register function
+  $('#addPetBtn').on('click', addPet); // calls addPet function
+  $('#regBtn').on('click', registerOwner);
+  refreshPets();
 
 }
 
@@ -68,38 +68,58 @@ function registerOwner(event) {
     first_name: firstNameIn,
     last_name: lastNameIn
   };
-   $.ajax({
-      url: '/hotel/owners',
-      type: 'POST',
-      data: ownerObjectToSend
-   }).done(function (response) {
-  refreshOwners();
-   }).fail(function (error) {
-     console.log('error', error);
-   });
+  $.ajax({
+    url: '/hotel/owners',
+    type: 'POST',
+    data: ownerObjectToSend
+  }).done(function (response) {
+    getOwners();
+  }).fail(function (error) {
+    console.log('error', error);
+  });
 }  // end registerOwner function
 
 function getOwners() {
   $.ajax({
     type: 'GET',
-    url: '/owners',
+    url: '/hotel/owners',
   }).done(function(response){
     var owners = response;
+    // console.log("in getOwners", owners);
     refreshOwners(owners);
   }).fail(function (error){
     alert('Something appears to be in error');
   });
-}
-function refreshOwners(ownerNamesArray) {
-$('#ownerName').empty();
-for (var i = 0; i < ownerNamesArray.length; i++) {
-  ownerName = ownerNamesArray[i];
-  var $option = $('<option></option>');
-  $option.append(ownerName.firstName + ownerName.lastName);//?????
-  $('#ownerName').append($option);
-}
+} //end getOwners!!
 
-}
+function refreshOwners(ownerNamesArray) {
+  var $el = $('#ownerName');
+  //empty out the dropdown menu
+  $el.empty();
+  //pick each element of the names array
+  var object = ownerNamesArray[i];
+  //create an empty object to store each name
+  var object2 = {};
+  // console.log('ownerNamesArray', ownerNamesArray);
+
+  //loop through the array and pull out each name, saving it to the object
+  for (var i = 0; i < ownerNamesArray.length; i++) {
+    var ownerName = ownerNamesArray[i];
+    var realName = ownerName.first_name + ownerName.last_name;
+    console.log(realName);
+    object2[i] = realName;
+  }
+
+  console.log(object2);
+
+  //loop through the properties of your object and update the dropdown menu
+  $.each(object2, function(key,value) {
+    $el.append($("<option></option>")
+    .data("id", key)
+    .attr("value", value).text(value));
+  });
+
+} //end refreshOwners!!!
 
 function addPet(event) {
   console.log('addPet clicked');
@@ -117,12 +137,12 @@ function addPet(event) {
   };
   console.log(newPetObjectToSend);
   $.ajax({
-     url: '/hotel/pets',
-     type: 'POST',
-     data: newPetObjectToSend
+    url: '/hotel/pets',
+    type: 'POST',
+    data: newPetObjectToSend
   }).done(function (response) {
     console.log(response);
-  refreshOwners();
+    refreshOwners();
   }).fail(function (error) {
     console.log('error', error);
   });
