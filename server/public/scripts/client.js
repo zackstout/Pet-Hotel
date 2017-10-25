@@ -43,13 +43,33 @@ function registerOwner() {
       type: 'POST',
       data: ownerObjectToSend
    }).done(function (response) {
-   refreshOwners();
+  //  refreshOwners();
    }).fail(function (error) {
      console.log('error', error);
    });
 }  // end registerOwner function
 
-function refreshOwners() {}
+function getOwners() {
+  $.ajax({
+    type: 'GET',
+    url: '/owners',
+  }).done(function(response){
+    var owners = response;
+    refreshOwners(owners);
+  }).fail(function (error){
+    alert('Something appears to be in error');
+  });
+}
+function refreshOwners(ownerNamesArray) {
+$('#ownerName').empty();
+for (var i = 0; i < ownerNamesArray.length; i++) {
+  ownerName = ownerNamesArray[i];
+  var $option = $(<option></option>);
+  $option.append(ownerName.firstName + ownerName.lastName);//?????
+
+}
+
+}
 
 function addPet() {
   console.log('addPet clicked');
