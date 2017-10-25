@@ -85,8 +85,8 @@ dongleRouter.post('/pets', function(req, res){
       console.log('Error connecting', err);
       res.sendStatus(500);
     } else {
-      var queryText = 'INSERT INTO "hotel_pets" ("name", "breed", "color") VALUES ($1, $2, $3);';
-      db.query(queryText, [pet.name, pet.breed, pet.color], function (err, result) {
+      var queryText = 'INSERT INTO "hotel_pets" ("name", "breed", "color", "checked_in") VALUES ($1, $2, $3, $4);';
+      db.query(queryText, [pet.petNameIn, pet.petBreedIn, pet.petColorIn, false], function (err, result) {
         done(); // pool +1
         if (err) {
           console.log('Error making query', err);
