@@ -27,8 +27,9 @@ dongleRouter.get('/owners', function(req, res) {
           console.log('Error making query', err);
           res.sendStatus(500);
         } else {
-          console.log(result.rows);
+          // console.log(result.rows);
           res.send(result.rows);
+          console.log(result.rows);
         }
       });
     }
@@ -50,6 +51,7 @@ dongleRouter.get('/pets', function(req, res) {
           res.sendStatus(500);
         } else {
           res.send(result.rows);
+          console.log(result.rows);
         }
       });
     }
@@ -86,8 +88,8 @@ dongleRouter.post('/pets', function(req, res){
       console.log('Error connecting', err);
       res.sendStatus(500);
     } else {
-      var queryText = 'INSERT INTO "hotel_pets" ("name", "breed", "color", "checked_in") VALUES ($1, $2, $3, $4);';
-      db.query(queryText, [pet.petNameIn, pet.petBreedIn, pet.petColorIn, false], function (err, result) {
+      var queryText = 'INSERT INTO "hotel_pets" ("owner_id", "name", "breed", "color", "checked_in") VALUES ($1, $2, $3, $4, $5);';
+      db.query(queryText, [pet.ownerIdIn, pet.petNameIn, pet.petBreedIn, pet.petColorIn, false], function (err, result) {
         done(); // pool +1
         if (err) {
           console.log('Error making query', err);

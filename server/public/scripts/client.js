@@ -12,6 +12,7 @@ function readyNow() {
   $('#addPetBtn').on('click', addPet); // calls addPet function
   $('#regBtn').on('click', registerOwner);
   refreshPets();
+  getOwners();
 
 }
 
@@ -34,6 +35,7 @@ function refreshPets() {
 
 function appendToDom(array) {
   console.log('appending', array);
+  $('#tBody').empty();
 
   for (var i = 0; i < array.length; i++) {
     var pet = array[i];
@@ -73,7 +75,7 @@ function registerOwner(event) {
     type: 'POST',
     data: ownerObjectToSend
   }).done(function (response) {
-    getOwners();
+    getOwners(response);
   }).fail(function (error) {
     console.log('error', error);
   });
@@ -86,6 +88,7 @@ function getOwners() {
   }).done(function(response){
     var owners = response;
     // console.log("in getOwners", owners);
+    console.log(response);
     refreshOwners(owners);
   }).fail(function (error){
     alert('Something appears to be in error');
@@ -100,37 +103,45 @@ function refreshOwners(ownerNamesArray) {
   var object = ownerNamesArray[i];
   //create an empty object to store each name
   var object2 = {};
-  // console.log('ownerNamesArray', ownerNamesArray);
+  console.log('ownerNamesArray', ownerNamesArray);
 
   //loop through the array and pull out each name, saving it to the object
   for (var i = 0; i < ownerNamesArray.length; i++) {
     var ownerName = ownerNamesArray[i];
     var realName = ownerName.first_name + ownerName.last_name;
+    console.log('what is the owner name.id', ownerName.id);
     console.log(realName);
     object2[i] = realName;
+    //option's value ends up being what is in the line 135, the .val()
+    $el.append($("<option value=' " + ownerName.id + "'>"+realName+"</option>"));
+
   }
 
   console.log(object2);
 
   //loop through the properties of your object and update the dropdown menu
-  $.each(object2, function(key,value) {
-    $el.append($("<option></option>")
-    .data("id", key)
-    .attr("value", value).text(value));
-  });
+  // $.each(object2, function(key,value) {
+  //   $el.append($("<option value=' " + ownerName.id + "'></option>")
+  //   .data("id", key)
+  //   .attr("value", value).text(value));
+  // });
 
 } //end refreshOwners!!!
 
 function addPet(event) {
   console.log('addPet clicked');
   event.preventDefault();
-  // var ownerNameIn = $('#ownerName option:selected');
+  // var ownerIdIn = $('#ownerName').data('id');
+  var ownerIdIn = $('#ownerName').val();
+  console.log('owner id selected', ownerIdIn);
+  // var ownerNameIn = $('#ownerName').val();
   var petNameIn = $('#petName').val();
   var petColorIn = $('#petColor').val();
   var petBreedIn = $('#petBreed').val();
 
   var newPetObjectToSend = {
     // ownerNameIn: ownerNameIn,
+    ownerIdIn: ownerIdIn,
     petNameIn : petNameIn,
     petColorIn : petColorIn,
     petBreedIn : petBreedIn
@@ -142,9 +153,10 @@ function addPet(event) {
     data: newPetObjectToSend
   }).done(function (response) {
     console.log(response);
-    refreshOwners();
+    // refreshOwners();
+    refreshPets();
   }).fail(function (error) {
     console.log('error', error);
   });
 
-}
+} //end add pets!!
