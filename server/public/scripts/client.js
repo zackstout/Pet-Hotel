@@ -11,6 +11,7 @@ function readyNow() {
   // }); // prevents automatic refresh due to form and calls register function
   $('#addPetBtn').on('click', addPet); // calls addPet function
   $('#regBtn').on('click', registerOwner);
+  $('#tBody').on('click', '.deleteBtn', deleteButton);
   refreshPets();
   getOwners();
 
@@ -117,7 +118,7 @@ function refreshOwners(ownerNamesArray) {
 
   }
 
-  console.log(object2);
+  
 
   //loop through the properties of your object and update the dropdown menu
   // $.each(object2, function(key,value) {
@@ -159,4 +160,20 @@ function addPet(event) {
     console.log('error', error);
   });
 
-} //end add pets!!
+}
+
+function deleteButton() {
+  var petId = $(this).data('id');
+  console.log(petId);
+$.ajax( {
+  url: 'hotel/pets/' + petId, 
+  type: 'DELETE',
+}).done(function (response){
+  console.log(response);
+  refreshOwners();
+  refreshPets();
+}).fail(function (error) {
+  console.log('error', error);
+});
+}
+
